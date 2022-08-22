@@ -59,7 +59,7 @@ function GetAllCustomers() {
         <td>{customer.surname}</td>
         <td>{customer.location}</td>
         <td>
-          <div className="d-flex " style={{ width: "400px" }}>
+          <div className="d-flex " >
             <Button
               style={{ marginRight: "10px" }}
               color="danger"

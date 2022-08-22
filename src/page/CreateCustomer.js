@@ -27,8 +27,11 @@ function CreateCustomer() {
           location:location
         
         };
-
-         axios.post("http://localhost:8080/add-customer", data)
+        const token = localStorage.getItem("token");
+        const config = {
+          headers: { Authorization: `Bearer ${token}` }
+      }      
+         axios.post("http://localhost:8080/customer/add-customer", data,config)
           .then((res) => successNote("Added succesfully")).catch((err) => {
             console.log(err)
             errorNote(err.response.data.message);

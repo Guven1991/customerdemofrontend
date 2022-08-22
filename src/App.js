@@ -5,6 +5,8 @@ import './App.css';
 import CreateCustomer from './page/CreateCustomer';
 import GetAllCustomers from './page/GetAllCustomers';
 import Home from './page/Home';
+import Login from './page/Login';
+import Register from './page/Register';
 
 function App() {
   
@@ -14,7 +16,9 @@ function App() {
     <Routes>
       <Route path="/" element={<Home/>} />                                           
       <Route path="/CreateCustomer" element={<CreateCustomer/>} />
-      <Route path="/GetAllCustomers" element={<GetAllCustomers/>} />       
+      <Route path="/GetAllCustomers" element={<GetAllCustomers/>} />
+      <Route path="/Login" element={<Login/>} />      
+      <Route path="/Register" element={<Register/>} />    
     </Routes>
     </div>
   );
