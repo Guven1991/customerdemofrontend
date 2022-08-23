@@ -1,7 +1,15 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Table, Button, Container } from "reactstrap";
+import {
+  Table,
+  Button,
+  Container,
+  Form,
+  FormGroup,
+  Input,
+} from "reactstrap";
+import { successNote } from "../CostumToastify";
 
 function GetAllCustomers() {
   // const [customers, setCustomers] = useState([]);
@@ -30,8 +38,13 @@ function GetAllCustomers() {
   };
   async function getAllCustomers(page = 0, size = 5) {
     try {
+      const token = localStorage.getItem("token");
+      const config = {
+        headers: { Authorization: `Bearer ${token}` },
+      };
       const response = await axios.get(
-        `http://localhost:8080/customers?page=${page}&size=${size}`
+        `http://localhost:8080/customer/customers?page=${page}&size=${size}`,
+        config
       );
       console.log(response.data);
       setPage(response.data);
@@ -44,11 +57,17 @@ function GetAllCustomers() {
   }, []);
 
   const handleDelete = async (id) => {
+    const token = localStorage.getItem("token");
+    const config = {
+      headers: { Authorization: `Bearer ${token}` },
+    };
     axios
-      .delete(`http://localhost:8080/delete-customer/${id}`)
-      .then(() => console.log("Delete successful"));
+      .delete(`http://localhost:8080/customer/delete-customer/${id}`, config)
+      .then((res) => successNote("Delete successful"));
     console.log(id);
-    window.location.reload();
+    setTimeout(() => {
+              window.location.reload();
+            }, 3000);
   };
 
   const customerList = customers.map((customer) => {
@@ -59,7 +78,7 @@ function GetAllCustomers() {
         <td>{customer.surname}</td>
         <td>{customer.location}</td>
         <td>
-          <div className="d-flex " >
+          <div className="d-flex ">
             <Button
               style={{ marginRight: "10px" }}
               color="danger"
@@ -88,13 +107,33 @@ function GetAllCustomers() {
 
   let actionDiv = (
     <div className="d-flex justify-content-between">
-        {first === false &&
-        <button className="btn btn-sm btn-light" onClick={onClickPrevious}>Previous</button>}
-        {last === false && <button className="btn btn-sm btn-light" onClick={onClickNext}>Next</button>}
+      {first === false && (
+        <button className="btn btn-sm btn-light" onClick={onClickPrevious}>
+          Previous
+        </button>
+      )}
+      {last === false && (
+        <button className="btn btn-sm btn-light" onClick={onClickNext}>
+          Next
+        </button>
+      )}
     </div>
-);
+  );
+
   return (
     <Container className="d-flex flex-column mt-5 align-items-center h-100 justify-content-center">
+      <div>
+        <Form className="form">
+          <FormGroup >
+            <Input
+              type="text"
+              name="Username"
+              id="Username"
+              placeholder="Location"
+            />
+          </FormGroup>
+        </Form>
+      </div>
       <div>
         <Table responsive hover>
           <thead>

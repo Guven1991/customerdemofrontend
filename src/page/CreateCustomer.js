@@ -32,7 +32,7 @@ function CreateCustomer() {
           headers: { Authorization: `Bearer ${token}` }
       }      
          axios.post("http://localhost:8080/customer/add-customer", data,config)
-          .then((res) => successNote("Added succesfully")).catch((err) => {
+          .then((res) => successNote("Kullanıcı eklendi")).catch((err) => {
             console.log(err)
             errorNote(err.response.data.message);
           });         

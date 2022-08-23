@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import {
     Button,
     Container,
@@ -10,7 +11,7 @@ import {
   } from 'reactstrap';
 
 export default function Login() {
-
+    const navigate = useNavigate();
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
 
@@ -28,7 +29,9 @@ export default function Login() {
           .then(function (response) {
             console.log(response);
             localStorage.setItem("token", response.data.token);
+            navigate('/');
           })
+          
       };
 
   return (
