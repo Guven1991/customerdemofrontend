@@ -13,48 +13,56 @@ import { successNote } from "../CostumToastify";
 
 function GetAllCustomers() {
   // const [customers, setCustomers] = useState([]);
+  const [sortField, setSortField]= useState("name");
+  const [isDesc, setIsDesc] = useState(false);
   const [page, setPage] = useState({
     content: [],
     size: 5,
     number: 0,
+    first: true,
+    last: false
   });
-  const { content: customers, last, first } = page;
+  const { content,last, first } = page;
 
   const onClickNext = () => {
-    const nextPage = page.number + 1;
-    loadUsers(nextPage);
+    // const nextPage = page.number + 1;
+    // loadUsers(nextPage);
+    setPage(prev=>({...prev,number : prev.number+1}));
   };
 
   const onClickPrevious = () => {
-    const nextPrevious = page.number - 1;
-    loadUsers(nextPrevious);
+    // const nextPrevious = page.number - 1;
+    // loadUsers(nextPrevious);
+    setPage(prev=>({...prev,number : prev.number-1}));
   };
 
-  const loadUsers = async (page) => {
+  const loadUsers = async (page,isDesc,sortField) => {
     try {
-      const response = await getAllCustomers(page);
-      setPage(response.data);
+      const response = await getAllCustomers(isDesc,sortField);
+      console.log(response.number,response.size);
+      setPage({...page,content:response.content,first:response.first,last:response.last,number:response.number,size:response.size});
     } catch (error) {}
   };
-  async function getAllCustomers(page = 0, size = 5) {
+  async function getAllCustomers(isDesc,sortField) {
     try {
       const token = localStorage.getItem("token");
       const config = {
         headers: { Authorization: `Bearer ${token}` },
       };
       const response = await axios.get(
-        `http://localhost:8080/customer/customers?page=${page}&size=${size}`,
+        `http://localhost:8080/customer/customers?page=${page.number}&size=${page.size}&isDesc=${isDesc}&sortField=${sortField}`,
         config
       );
-      console.log(response.data);
-      setPage(response.data);
+      console.log(response.data.content);
+      // setPage({...page,content:response.data});
+      return response.data;
     } catch (error) {
       console.error(error);
     }
   }
   useEffect(() => {
-    loadUsers();
-  }, []);
+    loadUsers(page,isDesc,sortField);
+  }, [page.number,page.size,isDesc,sortField]);
 
   const handleDelete = async (id) => {
     const token = localStorage.getItem("token");
@@ -65,12 +73,14 @@ function GetAllCustomers() {
       .delete(`http://localhost:8080/customer/delete-customer/${id}`, config)
       .then((res) => successNote("Delete successful"));
     console.log(id);
-    setTimeout(() => {
-              window.location.reload();
-            }, 3000);
+    setPage({...page,content:page.content.filter(content => content.id !== id)});
+    setPage({...page,size:setPage.size-1})
+    // setTimeout(() => {
+    //           window.location.reload();
+    //         }, 3000);
   };
 
-  const customerList = customers.map((customer) => {
+  const customerList = content?.map((customer) => {
     return (
       <tr key={customer.id}>
         <th scope="row">{customer.id}</th>
@@ -123,25 +133,13 @@ function GetAllCustomers() {
   return (
     <Container className="d-flex flex-column mt-5 align-items-center h-100 justify-content-center">
       <div>
-        <Form className="form">
-          <FormGroup >
-            <Input
-              type="text"
-              name="Username"
-              id="Username"
-              placeholder="Location"
-            />
-          </FormGroup>
-        </Form>
-      </div>
-      <div>
         <Table responsive hover>
           <thead>
             <tr>
-              <th>Id</th>
-              <th>Name</th>
-              <th>Surname</th>
-              <th>Location</th>
+              <th onClick={()=>setSortField("id")}>Id</th>
+              <th onClick={()=>setSortField("name")}>Name</th>
+              <th onClick={()=>setSortField("surname")}>Surname</th>
+              <th onClick={()=>setSortField("location")}>Location</th>
             </tr>
           </thead>
           <tbody>{customerList}</tbody>

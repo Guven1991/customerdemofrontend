@@ -76,9 +76,9 @@ function CreateCustomer() {
           />
         </FormGroup>
         <Link to={"/GetAllCustomers"}>
-          <Button color="primary"  className="float-end btn btn-primary">View City List</Button>  
+          <Button color="primary"  className="float-end btn btn-primary">View Customer List</Button>  
         </Link>
-        <Button  color="primary" style={{marginRight:"10px"}} className=" float-end ">Add City</Button>
+        <Button  color="primary" style={{marginRight:"10px"}} className=" float-end ">Add Customer</Button>
       </Form>
       </div>
     );
