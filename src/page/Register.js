@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import {
     Button,
     Container,
@@ -12,7 +13,7 @@ import {
 
 
 export default function Register() {
-
+  const navigate = useNavigate();
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -34,6 +35,7 @@ export default function Register() {
         axios.post("http://localhost:8080/users/signup", data)
           .then(function (response) {
             console.log(response);
+            navigate('/login');
           })
       };
 

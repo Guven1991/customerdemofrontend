@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
     Button,
     Container,
@@ -60,6 +60,10 @@ export default function Login() {
             />
           </FormGroup>
         <Button block>Enter</Button>
+        <span>Kayıt olmadın mı?</span>
+        <Link to={"/register"}>
+        <Button className=' ml-2 mt-2'>Kayıt Ol</Button>
+        </Link>
       </Form>
     </div>
     </Container>

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import {BiSortAlt2} from "react-icons/bi";
 import {
   Table,
   Button,
@@ -50,7 +51,7 @@ function GetAllCustomers() {
         headers: { Authorization: `Bearer ${token}` },
       };
       const response = await axios.get(
-        `http://localhost:8080/customer/customers?page=${page.number}&size=${page.size}&isDesc=${isDesc}&sortField=${sortField}`,
+        `http://localhost:8080/customer/customers/sort?page=${page.number}&size=${page.size}&isDesc=${isDesc}&sortField=${sortField}`,
         config
       );
       console.log(response.data.content);
@@ -140,6 +141,7 @@ function GetAllCustomers() {
               <th onClick={()=>setSortField("name")}>Name</th>
               <th onClick={()=>setSortField("surname")}>Surname</th>
               <th onClick={()=>setSortField("location")}>Location</th>
+              <th onClick={()=>setIsDesc(prev=>!prev)}><BiSortAlt2/></th>
             </tr>
           </thead>
           <tbody>{customerList}</tbody>
