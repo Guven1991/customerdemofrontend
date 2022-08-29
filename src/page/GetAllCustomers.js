@@ -36,7 +36,16 @@ function GetAllCustomers() {
     // loadUsers(nextPrevious);
     setPage(prev=>({...prev,number : prev.number-1}));
   };
+  
+  const [filterText,setFilterText]= useState('');
 
+  const filtered = content.filter((item) => {
+      return Object.keys(item).some((key) =>
+          item[key]
+          .toString()
+          .toLowerCase().includes(filterText.toLowerCase())
+      )
+  });
   const loadUsers = async (page,isDesc,sortField) => {
     try {
       const response = await getAllCustomers(isDesc,sortField);
@@ -81,7 +90,7 @@ function GetAllCustomers() {
     //         }, 3000);
   };
 
-  const customerList = content?.map((customer) => {
+  const customerList = filtered?.map((customer) => {
     return (
       <tr key={customer.id}>
         <th scope="row">{customer.id}</th>
@@ -134,6 +143,9 @@ function GetAllCustomers() {
   return (
     <Container className="d-flex flex-column mt-5 align-items-center h-100 justify-content-center">
       <div>
+      <input placeholder='Filter customer'
+         value={filterText}
+          onChange={(e)=>  setFilterText(e.target.value)}/>
         <Table responsive hover>
           <thead>
             <tr>
